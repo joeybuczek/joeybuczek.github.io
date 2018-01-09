@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Arrays - syr(js)</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+![alt text](https://github.com/joeybuczek/syrjs_events/blob/master/images/syrjs_s.png?raw=true)
+
+---
+
+class: center, middle
+
+# ["JavaScript", "Arrays"].join(" ")
+
+
+---
+
+# Overview
+
+1. Array Basics
+
+2. Array Methods
+
+3. Practical Uses
+
+4. Resources
+
+---
+
+# Array Basics
+
+- Arrays are objects
+
+```javascript
+// declaring an array using array literal syntax
+var arr = [1, 2, 3];
+
+// checking its type
+typeof arr; // "object"
+
+// can also be declared using global Array()
+var myArray = new Array(1, 2, 3);
+```
+
+---
+
+# Array Basics
+
+- Elements in an array are properties on the object with keys that correspond to their index
+
+- Indexes are zero-based; 0 is first element, 1 is second, etc.
+
+```javascript
+var arr = [".js", ".css", ".html"];
+
+// access values by index via bracket notation
+arr[0]; // ".js"
+
+arr[1]; // ".css"
+
+arr[2]; // ".html"
+
+// reassign value in array by index
+arr[2] = ".cshtml"; // [".js", ".css", ".cshtml"]
+```
+
+---
+
+# Array Basics
+
+- Arrays have a length property, which returns number of elements
+
+```javascript
+arr.length; // 3
+
+// easily assign value to end of array using length property
+arr[arr.length] = ".ts"; // [".js", ".css", ".cshtml", ".ts"]
+
+// clear array by setting length to 0
+arr.length = 0;
+
+arr; // []
+```
+
+- Arrays can hold any data type, and can be mixed
+
+```javascript
+var anyArr = [0, "One", true, x => x + 1, [], {}, undefined, NaN, Infinity];
+```
+
+- Keep in mind that objects as elements are references to the objects in memory, not the objects themselves
+
+---
+
+# Array Methods
+
+- Arrays have a large collection of methods available to them
+
+- These methods are what make arrays so versatile
+
+---
+
+# Array Methods
+
+```javascript
+var arr = [1, 2, 3];
+
+// add one or more elements to end of array - returns array length
+arr.push(4);    // 4
+arr;            // [1, 2, 3, 4]
+
+// remove element from end of array and return it
+arr.pop();      // 4
+arr;            // [1, 2, 3]
+
+// add one or more elements to front of array - returns array length
+arr.unshift(0); // 4
+arr;            // [0, 1, 2, 3]
+
+// remove element from front of array and return it
+arr.shift();    // 0 
+arr;            // [1, 2, 3]
+```
+
+---
+
+# Array Methods
+
+```javascript
+var arr = ["A", "B", "C"];
+
+// create a full/partial copy of an array - does not modify original
+arr.slice(0);              // ["A", "B", "C"]
+arr.slice(1, 2);           // ["B"]
+
+// combine arrays - also returns copy of array
+arr.concat(["D", "E"]);    // ["A", "B", "C", "D", "E"]
+
+// remove elements from an array and returns them as an array - modifies original
+arr.splice(1, 1);          // ["B"]
+arr;                       // ["A", "C", "D", "E"]
+
+// remove elements, then add new ones into it as well
+var arr = ["A", "R", "T"];
+arr.splice(2, 1, "R");     // ["T"]
+arr;                       // ["A", "R", "R"];
+```
+
+---
+
+# Array Methods
+
+```javascript
+var arr = [1, 2, 3];
+
+// transform an array - returns new array
+var newArr = arr.map(el => el + 1);     // [2, 3, 4]
+
+// filter an array - returns new array
+var nextArr = arr.filter(el => el > 1); // [2, 3]
+
+// accumulate values of an array
+var accArr = arr.reduce((a, b) => a + b); // 6
+```
+
+---
+
+# Practical Uses
+
+- Accessing Arguments
+
+```javascript
+// ES5
+function sumAll() {
+  // Create an array of all arguments passed in using
+  // arguments exotic object:
+  var args = Array.prototype.slice.call(arguments);
+
+  // Return accumulated value
+  return args.reduce(function(a, b){
+    return a + b;
+  });
+}
+```
+
+```javascript
+// ES6 - Same result as above, cleaner and more succinct
+const sumAll = (...args) => args.reduce((a, b) => a + b);
+```
+
+*An arguments exotic object is an exotic object whose array index properties map to the formal parameters bindings of an invocation of its associated ECMAScript function.*
+
+*ECMAScript Specification Section 9.4.4*
+
+---
+
+# Practical Uses
+
+- Transformations
+
+```javascript
+var listItems = ['Subaru', 'Mazda', 'Saturn'];
+
+// Inside React component
+(<ul>
+  {listItems.map((item, index) => <li key={index}>{item}</li>)}
+</ul>)
+
+// <ul>
+//   <li>Subaru</li>
+//   <li>Mazda</li>
+//   <li>Saturn</li>
+// </ul>
+```
+
+---
+
+# Practical Uses
+
+- Working with database record sets
+
+```javascript
+var recordSet = [
+  { ID: 111, ClientID: 'CL00111', Priority: 1},
+  { ID: 232, ClientID: 'CL00232', Priority: 0},
+  { ID: 533, ClientID: 'CL00533', Priority: 3},
+  { ID: 567, ClientID: 'CL00567', Priority: 1},
+  { ID: 876, ClientID: 'CL00876', Priority: 2}
+];
+
+var highPriority = recordSet.filter(record => {
+  return record.Priority >= 2;
+});
+
+// [{ ID: 533, ClientID: 'CL00533', Priority: 3},
+//  { ID: 876, ClientID: 'CL00876', Priority: 2}]
+```
+
+---
+class: center, middle
+
+fin
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
